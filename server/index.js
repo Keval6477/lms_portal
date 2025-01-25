@@ -6,6 +6,7 @@ import cors from "cors";
 import connectDb from "./database/db.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.route.js";
+import courseRoutes from "./routes/course.route.js";
 //call db
 connectDb();
 const app = express();
@@ -19,7 +20,7 @@ app.use(
 );
 app.use(helmet());
 app.use("/api/v1/user", userRoutes);
-
+app.use("/api/v1/course", courseRoutes);
 app.get("/home", (_, res) => {
   return res.status(200).json({
     success: true,

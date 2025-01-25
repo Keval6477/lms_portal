@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./rootReducer";
-import { authApi } from "@/api/authApi";
+import { authApi } from "@/features/api/authApi";
+import { courseApi } from "@/features/api/courseApi";
 
 export const appStore = configureStore({
   reducer: {
     auth: rootReducer,
     [authApi.reducerPath]: authApi.reducer, // Add the reducer for RTK Query
+    [courseApi.reducerPath]: courseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware, courseApi.middleware),
 });
 
 const initializeApp = async () => {

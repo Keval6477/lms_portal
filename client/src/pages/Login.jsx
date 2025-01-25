@@ -1,4 +1,4 @@
-import { useLoginUserMutation, useRegisterUserMutation } from "@/api/authApi";
+import { useLoginUserMutation, useRegisterUserMutation } from "@/features/api/authApi";
 import { Button } from "@/components/ui/button";
 import {
   Card,

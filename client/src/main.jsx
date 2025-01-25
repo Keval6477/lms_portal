@@ -5,7 +5,7 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { appStore } from "./app/store";
 import { Toaster } from "./components/ui/sonner";
-import { useLoadUserQuery } from "./api/authApi";
+import { useLoadUserQuery } from "./features/api/authApi";
 
 // eslint-disable-next-line react/prop-types
 const Custom = ({ children }) => {

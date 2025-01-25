@@ -24,13 +24,14 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "../ui/separator";
 import { Link, useNavigate } from "react-router-dom";
-import { useLogoutUserMutation } from "@/api/authApi";
+import { useLogoutUserMutation } from "@/features/api/authApi";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const { user, isAuthenticated } = useSelector((store) => store.auth.auth);
+  console.log(user);
   const navigate = useNavigate();
   const [logoutUser, { data, isSuccess, isLoading, isError }] =
     useLogoutUserMutation();

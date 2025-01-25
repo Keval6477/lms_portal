@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import Course from "./Course";
-import { useLoadUserQuery, useUpdateUserMutation } from "@/api/authApi";
+import { useLoadUserQuery, useUpdateUserMutation } from "@/features/api/authApi";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
