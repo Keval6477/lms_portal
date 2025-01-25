@@ -28,7 +28,7 @@ const Course = () => {
   };
   const createCourseHandler = async () => {
     await createCourse({ courseTitle, category });
-    console.log(courseTitle, category);
+    // console.log(courseTitle, category);
   };
 
   // console.log(isSuccess);
@@ -36,6 +36,7 @@ const Course = () => {
     //displpay toast
     if (data && isSuccess) {
       toast.success(data?.message || "course added successfully.");
+      navigate("/admin/course");
     }
 
     if (error) {

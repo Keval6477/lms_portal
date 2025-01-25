@@ -22,7 +22,7 @@ const CourseTable = () => {
   if (isLoading) {
     return <h1>Loading.....</h1>;
   }
-  console.log(data);
+  // console.log(data);
   return (
     <div>
       <Button className="mb-5" onClick={() => navigate("create")}>
@@ -49,7 +49,11 @@ const CourseTable = () => {
               </TableCell>
               <TableCell>{course.courseTitle}</TableCell>
               <TableCell className="text-right">
-                <Button size="sm" variant="ghost">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => navigate(`${course._id}`)}
+                >
                   <Edit />
                 </Button>
               </TableCell>
@@ -57,10 +61,10 @@ const CourseTable = () => {
           ))}
         </TableBody>
         <TableFooter>
-          <TableRow>
+          {/* <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
             <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
+          </TableRow> */}
         </TableFooter>
       </Table>
     </div>
