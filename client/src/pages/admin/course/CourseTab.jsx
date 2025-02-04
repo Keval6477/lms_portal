@@ -18,7 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEditCourseMutation } from "@/features/api/courseApi";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+  usePublishCourseMutation,
+} from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,8 +31,6 @@ import { toast } from "sonner";
 const CourseTab = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
-  const [editCourse, { data, isSuccess, isLoading, isError }] =
-    useEditCourseMutation();
   const [input, setInput] = useState({
     courseTitle: "",
     subTitle: "",
@@ -39,11 +41,36 @@ const CourseTab = () => {
     courseThumbnail: "",
   });
   const [preview, setPreview] = useState("");
+  const {
+    data: courseData,
+    isLoading: courseByIdLoading,
+    refetch,
+  } = useGetCourseByIdQuery(courseId, { refetchOnMountOrArgChange: true });
+  // console.log(course);
+  const [publishCourse] = usePublishCourseMutation();
+  useEffect(() => {
+    const course = courseData?.course;
+    if (course) {
+      setInput({
+        courseTitle: course?.courseTitle,
+        subTitle: course?.subTitle,
+        description: course?.description,
+        category: course?.category,
+        courseLevel: course?.courseLevel,
+        coursePrice: course?.coursePrice,
+        courseThumbnail: course?.courseThumbnail,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId, courseData]);
+
+  const [editCourse, { data, isSuccess, isLoading, isError }] =
+    useEditCourseMutation();
+
   const changeHandler = async (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
-  const isPublished = true;
   const selectCategory = (value) => {
     setInput({ ...input, category: value });
   };
@@ -75,14 +102,36 @@ const CourseTab = () => {
     console.log(input);
   };
 
+  const publishStatusHandler = async (action) => {
+    try {
+      console.log(action);
+      const response = await publishCourse({ courseId, action });
+      if (response.data) {
+        refetch();
+        toast.success(response?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("failed");
+    }
+  };
+
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message || "updated successfully");
+      navigate("/admin/course");
     }
     if (isError) {
       toast.error(data?.error?.message || "something went wrong.");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, isSuccess, isError]);
+
+  if (courseByIdLoading) {
+    return <h1>Loading....</h1>;
+  }
+  // console.log(courseData?.course?.isPublished)
+
   return (
     <Card>
       <CardHeader className="flex justify-between items-center flex-row">
@@ -91,8 +140,16 @@ const CourseTab = () => {
           <CardDescription>Make changes to your courses</CardDescription>
         </div>
         <div className="space-x-4 gap-3">
-          <Button variant="outline">
-            {isPublished ? "Unpublished" : "Published"}
+          <Button
+            variant="outline"
+            onClick={() =>
+              publishStatusHandler(
+                courseData?.course?.isPublished ? "false" : "true"
+              )
+            }
+            disabled={courseData?.course?.lectures.length == 0}
+          >
+            {courseData?.course?.isPublished ? "Unpublished" : "Published"}
           </Button>
           <Button>Remove Course</Button>
         </div>
@@ -126,7 +183,7 @@ const CourseTab = () => {
           <div className="mt-4 flex items-center gap-5">
             <div>
               <Label>Category</Label>
-              <Select onValueChange={selectCategory}>
+              <Select onValueChange={selectCategory} value={input.category}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a Category" />
                 </SelectTrigger>
@@ -144,14 +201,17 @@ const CourseTab = () => {
             </div>
             <div>
               <Label>Course Label</Label>
-              <Select onValueChange={selectCourseLevel}>
+              <Select
+                onValueChange={selectCourseLevel}
+                value={input.courseLevel}
+              >
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a course label" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="Begginer">Begginer</SelectItem>
+                    <SelectItem value="Beginner">Begginer</SelectItem>
                     <SelectItem value="Medium">Medium</SelectItem>
                     <SelectItem value="Advanced">Advanced</SelectItem>
                   </SelectGroup>

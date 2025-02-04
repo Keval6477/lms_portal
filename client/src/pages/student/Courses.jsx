@@ -1,9 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import Course from "./Course";
+import { useGetPublishCourseQuery } from "@/features/api/courseApi";
 
 const Courses = () => {
-  const isLoading = false;
-  const courses = [1, 2, 3, 4, 5, 6];
+  const { data: courses, isLoading } = useGetPublishCourseQuery();
+  // const isLoading = false;
+  // const courses = [1, 2, 3, 4, 5, 6];
+  console.log(courses);
+  if (isLoading) {
+  }
   return (
     <div className="bg-gray-100">
       <div className="max-w-7xl mx-auto p-6">
@@ -13,7 +18,10 @@ const Courses = () => {
             ? Array.from({ length: 8 }).map((_, index) => (
                 <CourseSkeleton key={index} />
               ))
-            : courses.map((course, index) => <Course key={index} />)}
+            : courses?.courses &&
+              courses?.courses.map((course, index) => (
+                <Course key={index} course={course} />
+              ))}
         </div>
       </div>
     </div>
