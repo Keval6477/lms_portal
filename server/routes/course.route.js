@@ -33,4 +33,5 @@ router.route("/lecture/:lectureId").delete(isAutheticated, removeLecture);
 router.route("/lecture/:lectureId").get(isAutheticated, getLectureById);
 router.route("/:courseId").patch(isAutheticated, togglePublishCourse);
 router.route("/publishedCourses").get(isAutheticated, getPublishedCourse);
+
 export default router;

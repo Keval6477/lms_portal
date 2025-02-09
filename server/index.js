@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.route.js";
 import courseRoutes from "./routes/course.route.js";
 import mediaUploadRoutes from "./routes/media.route.js";
+import purchaseCourseRoutes from "./routes/purchaseCourse.route.js";
 //call db
 connectDb();
 const app = express();
@@ -23,6 +24,7 @@ app.use(helmet());
 app.use("/api/v1/media", mediaUploadRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/course", courseRoutes);
+app.use("/api/v1/purchase", purchaseCourseRoutes);
 app.get("/home", (_, res) => {
   return res.status(200).json({
     success: true,
